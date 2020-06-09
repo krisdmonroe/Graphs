@@ -272,7 +272,7 @@ class Graph:
         #         if new_dfs_path is not None:
         #             return new_dfs_path
         # return None
-def earliest_ancestor(ancestors, starting_node, path=None, visited=None):
+def earliest_ancestor(ancestors, starting_node, ancestor=False):
     # print('this is ancestors', ancestors)
     '''
        10
@@ -283,23 +283,30 @@ def earliest_ancestor(ancestors, starting_node, path=None, visited=None):
        \ / \   \
         6   7   9
     '''
-    if visited is None:
-        visited = set()
-
-    if path is None:
-        path = []
-    print(starting_node)
-    visited.add(starting_node)
-    path = path + [starting_node]
-    print('path', path)
-    print(visited)
-    for parent, child in ancestors:
-        if child not in visited:
-            newPath = earliest_ancestor(ancestors, child, path, visited)
-
-            if newPath is not None:
-                return newPath
     # [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+    # get parent child
+    # print('starting Node', starting_node)
+    for parent, child in ancestors:
+        # get the child if it equals the starting node
+        # so if 1 pass in the child of 10 is 1
+        # if a child to the starting node exists it will continue
+        if child == starting_node:
+            # print(child)
+            # pass in the parent
+            # so if 1 passed in the parent of 1 is 10
+            #set it to true so we can go through the if statement
+            return earliest_ancestor(ancestors, parent, True)
+    
+    if ancestor == True:
+        # return the starting node
+        # we passed in parent so we would return the parent of the child
+        return starting_node
+    else:
+        # if it doesnt equal true return -1
+        return -1
+
+    
+    
     # def dft_recursive(self, starting_vertex, visited=None):
     #     """
     #     Print each vertex in depth-first order
