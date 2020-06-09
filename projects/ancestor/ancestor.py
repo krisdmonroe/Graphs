@@ -272,8 +272,56 @@ class Graph:
         #         if new_dfs_path is not None:
         #             return new_dfs_path
         # return None
-def earliest_ancestor(ancestors, starting_node):
-    print('this is ancestors', ancestors)
-    print('this is starting_node', starting_node)
-    for i in get_neighbors(starting_node):
-        return print(i)
+def earliest_ancestor(ancestors, starting_node, path=None, visited=None):
+    # print('this is ancestors', ancestors)
+    '''
+       10
+     /
+    1   2   4  11
+     \ /   / \ /
+      3   5   8
+       \ / \   \
+        6   7   9
+    '''
+    if visited is None:
+        visited = set()
+
+    if path is None:
+        path = []
+    print(starting_node)
+    visited.add(starting_node)
+    path = path + [starting_node]
+    print('path', path)
+    print(visited)
+    for parent, child in ancestors:
+        if child not in visited:
+            newPath = earliest_ancestor(ancestors, child, path, visited)
+
+            if newPath is not None:
+                return newPath
+    # [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+    # def dft_recursive(self, starting_vertex, visited=None):
+    #     """
+    #     Print each vertex in depth-first order
+    #     beginning from starting_vertex.
+
+    #     This should be done using recursion.
+    #     """
+    #     print(starting_vertex)
+    #     if visited is None:
+    #         visited = set()
+        
+    #     visited.add(starting_vertex)
+
+    #     for next_vert in self.get_neighbors(starting_vertex):
+    #         if next_vert not in visited:
+    #             self.dft_recursive(next_vert, visited)
+    # '''
+    # Should print:
+    #     {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
+    #     {1: {3}, 2: {3}, 3: {6}, 4: {8, 5}, 5: {6, 7}, 6: set(), 7: set(), 8: {9}, 9: set(), 10: {1}, 11: {8}}
+    # '''
+    
+        
+
+        
