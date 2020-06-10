@@ -121,6 +121,7 @@ class Graph:
                 visited.add(last_vertex)
 				# Then add A PATH TO its neighbors to the back of the queue
                 for neighbor in self.get_neighbors(last_vertex):
+                    print(neighbor)
                     # print(neighbor)
 				    # COPY THE PATH
                     new_path = list(path)
@@ -233,8 +234,10 @@ class Graph:
             path = []
             
         visited.add(starting_vertex)
-        path = path + [starting_vertex]
+        # path = path + [starting_vertex]
         # print('this is path', path)
+        new_path = list(path)
+        new_path.append(starting_vertex)
 
         if starting_vertex == destination_vertex:
             return path
@@ -272,62 +275,94 @@ class Graph:
         #         if new_dfs_path is not None:
         #             return new_dfs_path
         # return None
-def earliest_ancestor(ancestors, starting_node, ancestor=False):
-    # print('this is ancestors', ancestors)
-    '''
-       10
-     /
-    1   2   4  11
-     \ /   / \ /
-      3   5   8
-       \ / \   \
-        6   7   9
-    '''
-    # [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-    # get parent child
-    # print('starting Node', starting_node)
-    for parent, child in ancestors:
-        # get the child if it equals the starting node
-        # so if 1 pass in the child of 10 is 1
-        # if a child to the starting node exists it will continue
-        if child == starting_node:
-            # print(child)
-            # pass in the parent
-            # so if 1 passed in the parent of 1 is 10
-            #set it to true so we can go through the if statement
-            return earliest_ancestor(ancestors, parent, True)
-    
-    if ancestor == True:
-        # return the starting node
-        # we passed in parent so we would return the parent of the child
-        return starting_node
-    else:
-        # if it doesnt equal true return -1
-        return -1
+def earliest_ancestor(ancestors, starting_node):
+#     # print('this is ancestors', ancestors)
+#     '''
+#        10
+#      /
+#     1   2   4  11
+#      \ /   / \ /
+#       3   5   8
+#        \ / \   \
+#         6   7   9
+#     '''
+# Create an empty queue and enqueue A PATH TO the starting vertex ID
+        q = Queue()
+        q.enqueue([starting_node])
+		# Create a Set to store visited vertices
+        visited = {}
+		# While the queue is not empty...
+        while q.size() > 0:
+			# Dequeue the first PATH
+            path = q.dequeue()
+            # print('this is path', path)
+			# Grab the last vertex from the PATH
+            last_vertex = path[-1]
+            # print('this is vertex', vertex)
+			# If that vertex has not been visited...
+            if last_vertex not in visited:
+                for parent, child in ancestors:
+				# Mark it as visited...
+                    visited[last_vertex] = child
+                    print(visited)
+				# Then add A PATH TO its neighbors to the back of the queue
+                # how to get the neighbor of this
+                    print('this is last_vertex', last_vertex)
+                    print('this is parent', parent)
+                    # print(neighbor)
+				    # COPY THE PATH
+                    new_path = list(path)
+				    # APPEND THE NEIGHOR TO THE BACK
+                    new_path.append(parent)
+                    q.enqueue(new_path)
+#     # [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+#     # get parent child
+#     # print('starting Node', starting_node)
+    # for parent, child in ancestors:
+    #     # get the child if it equals the starting node
+    #     # so if 1 pass in the child of 10 is 1
+    #     # if a child to the starting node exists it will continue
+    #     if child == starting_node:
+    #         # print(child)
+    #         # pass in the parent
+    #         # so if 1 passed in the parent of 1 is 10
+    #         #set it to true so we can go through the if statement
+    #         return earliest_ancestor(ancestors, parent, True)
+    # if ancestor == True:
+    #     # return the starting node
+    #     # we passed in parent so we would return the parent of the child
+    #     return starting_node
+    # else:
+    #     # if it doesnt equal true return -1
+    #     return -1
+        #given the dataset and the ID of an individual in the dataset
+        #returns their earliest known ancestor  
+        #the one at the farthest distance from the input individual.
+        #If there is more than one ancestor tied for "earliest"
+            #return the one with the lowest numeric ID
+            #If the input individual has no parents
+                # the function should return -1
+#     # def dft_recursive(self, starting_vertex, visited=None):
+#     #     """
+#     #     Print each vertex in depth-first order
+#     #     beginning from starting_vertex.
 
-    
-    
-    # def dft_recursive(self, starting_vertex, visited=None):
-    #     """
-    #     Print each vertex in depth-first order
-    #     beginning from starting_vertex.
-
-    #     This should be done using recursion.
-    #     """
-    #     print(starting_vertex)
-    #     if visited is None:
-    #         visited = set()
+#     #     This should be done using recursion.
+#     #     """
+#     #     print(starting_vertex)
+#     #     if visited is None:
+#     #         visited = set()
         
-    #     visited.add(starting_vertex)
+#     #     visited.add(starting_vertex)
 
-    #     for next_vert in self.get_neighbors(starting_vertex):
-    #         if next_vert not in visited:
-    #             self.dft_recursive(next_vert, visited)
-    # '''
-    # Should print:
-    #     {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
-    #     {1: {3}, 2: {3}, 3: {6}, 4: {8, 5}, 5: {6, 7}, 6: set(), 7: set(), 8: {9}, 9: set(), 10: {1}, 11: {8}}
-    # '''
+#     #     for next_vert in self.get_neighbors(starting_vertex):
+#     #         if next_vert not in visited:
+#     #             self.dft_recursive(next_vert, visited)
+#     # '''
+#     # Should print:
+#     #     {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
+#     #     {1: {3}, 2: {3}, 3: {6}, 4: {8, 5}, 5: {6, 7}, 6: set(), 7: set(), 8: {9}, 9: set(), 10: {1}, 11: {8}}
+#     # '''
     
         
 

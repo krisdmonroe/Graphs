@@ -47,7 +47,7 @@ class Graph:
 			# If that vertex has not been visited...
             if v not in visited:
 				# Visit it
-                print(v)
+                # print(v)
 
 				# Mark it as visited...
                 visited.add(v)
@@ -70,7 +70,7 @@ class Graph:
         while s.size() > 0:
             v = s.pop()
             if v not in visited:
-                print(v)
+                # print(v)
                 visited.add(v)
                 for next_vert in self.get_neighbors(v):
                     s.push(next_vert)
@@ -124,6 +124,8 @@ class Graph:
                 visited.add(last_vertex)
 				# Then add A PATH TO its neighbors to the back of the queue
                 for neighbor in self.get_neighbors(last_vertex):
+                    print('last_vertex', last_vertex)
+                    print('this is neighbor', neighbor)
                     # print(neighbor)
 				    # COPY THE PATH
                     new_path = list(path)
