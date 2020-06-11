@@ -94,8 +94,8 @@ class SocialGraph:
                 visited[(last_vertex)] = path
 				# Then add A PATH TO its neighbors to the back of the queue
                 for friend in self.friendships[last_vertex]:
-                    # print('this is self', self.friendships[last_vertex])
-                    print(friend)
+                    print('this is self', self.friendships[last_vertex])
+                    # print(friend)
 				    #COPY THE PATH
                     new_path = list(path)
 				    # APPEND THE NEIGHOR TO THE BACK
