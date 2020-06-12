@@ -1,3 +1,5 @@
+import random
+from util import Stack, Queue  # These may come in handy 
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,8 +47,25 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
-
+        for i in range(0, num_users):
+            self.add_user(f"User {i}")
         # Create friendships
+        possible_friendships = []
+
+        # Avoid duplicates by ensuring the first number is smaller than the second
+        for user_id in self.users:
+	        for friend_id in range(user_id + 1, self.last_id + 1):
+	            possible_friendships.append((user_id, friend_id))
+
+        # Shuffle the possible friendships
+        random.shuffle(possible_friendships)
+
+        # Create friendships for the first X pairs of the list
+        # X is determined by the formula: num_users * avg_friendships // 2
+        # Need to divide by 2 since each add_friendship() creates 2 friendships
+        for i in range(num_users * avg_friendships // 2):
+	        friendship = possible_friendships[i]
+	        self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,12 +78,41 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        q = Queue()
+        q.enqueue([user_id])
+        while q.size() > 0:
+			# Dequeue the first PATH
+            path = q.dequeue()
+            # print('this is path', path)
+			# Grab the last vertex from the PATH
+            last_vertex = path[-1]
+            # print('this is vertex', vertex)
+			# If that vertex has not been visited...
+            #keys here is not needed
+            # if last_vertex not in visited.keys():
+            if last_vertex not in visited:   
+                # print(last_vertex)
+				# Mark it as visited...
+                visited[(last_vertex)] = path
+				# Then add A PATH TO its neighbors to the back of the queue
+                for friend in self.friendships[last_vertex]:
+                    # print('this is self', self.friendships[last_vertex])
+                    # print(friend)
+				    #COPY THE PATH
+                    new_path = list(path)
+				    # APPEND THE NEIGHOR TO THE BACK
+                    new_path.append(friend)
+                    q.enqueue(new_path)
+                    # q.enqueue(path + [friend])
+
         return visited
-
-
+        
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+    users_in_ext_network = len(connections) -1
+    total_users = len(sg.users)
+    print(f'Percentage: {users_in_ext_network / total_users * 100:.2f}')
