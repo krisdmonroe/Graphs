@@ -88,19 +88,22 @@ class SocialGraph:
             last_vertex = path[-1]
             # print('this is vertex', vertex)
 			# If that vertex has not been visited...
-            if last_vertex not in visited.keys():
+            #keys here is not needed
+            # if last_vertex not in visited.keys():
+            if last_vertex not in visited:   
                 # print(last_vertex)
 				# Mark it as visited...
                 visited[(last_vertex)] = path
 				# Then add A PATH TO its neighbors to the back of the queue
                 for friend in self.friendships[last_vertex]:
-                    print('this is self', self.friendships[last_vertex])
+                    # print('this is self', self.friendships[last_vertex])
                     # print(friend)
 				    #COPY THE PATH
                     new_path = list(path)
 				    # APPEND THE NEIGHOR TO THE BACK
                     new_path.append(friend)
                     q.enqueue(new_path)
+                    # q.enqueue(path + [friend])
 
         return visited
         
@@ -110,3 +113,6 @@ if __name__ == '__main__':
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+    users_in_ext_network = len(connections) -1
+    total_users = len(sg.users)
+    print(f'Percentage: {users_in_ext_network / total_users * 100:.2f}')

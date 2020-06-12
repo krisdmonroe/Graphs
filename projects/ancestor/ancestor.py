@@ -62,7 +62,7 @@ def earliest_ancestor(ancestors, starting_node):
             # APPEND THE NEIGHOR TO THE BACK
             new_path.append(neighbor)
             q.enqueue(new_path)
-            print(graph.vertices)
+            # print(graph.vertices)
     return ancestor
 
 if __name__ == "__main__":

@@ -23,14 +23,74 @@ world.load_graph(room_graph)
 # Print an ASCII map
 world.print_rooms()
 
-player = Player(world.starting_room)
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
 
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
+player = Player(world.starting_room)
+# You may find the commands `player.current_room.id`, `player.current_room.get_exits()` 
+# and `player.travel(direction)` useful
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
-traversal_path = []
+reverse = {'n':'s','s':'n','e':'w','w':'e'}
+def traverse_recursive(start, visited=None, path=None):
 
+    # is visited is none set it to a set
+    if visited is None:
+        visited = set()
+    #if path is none set it to array/list
+    if path is None:
+        path = []
 
+    # travel down a path
+    # print(path)
+    for direction in player.current_room.get_exits():
+        player.travel(direction)
+        # look from starting room and see if its in visited:
+        # not in visited list
+        if player.current_room.id not in visited: 
+            # add it to visited
+            visited.add(player.current_room.id)
+            #add where we traveld
+            path.append(direction)
+            # repeat
+            traverse_recursive(player.current_room.id, visited, path)
+            # return to starting
+            player.travel(reverse[direction])
+            # add it same way as travel
+            path.append(reverse[direction])
+        # if its already been visited then we want to reverse our order
+        # and travel in the opposite direction
+        else:
+            player.travel(reverse[direction])
+    # print('this is visited', visited)
+    # print('this is path', path)
+    return path
 
+traversal_path = traverse_recursive(player.current_room.id)  
+ 
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
